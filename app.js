@@ -222,7 +222,7 @@ function renderResult(){
     <p class="muted">○率 ${Math.round((s.circle/Math.max(1,s.answered))*100)}%</p>
     <div class="button-row" style="justify-content:center"><button class="primary-btn" id="againBtn">同じ条件でもう一度</button><button class="secondary-btn" id="homeResultBtn">ホームへ</button></div>
   </section>`;
-  document.getElementById('againBtn').onclick=()=>s.mode==='cycle'?startCycle():startWrong(filterQuestions(state.filters));
+  document.getElementById('againBtn').onclick=()=>{ if(s.mode==='cycle') return startCycle(); if(s.mode==='wrong-global') return startGlobalWrong(); return startWrong(filterQuestions(state.filters)); };
   document.getElementById('homeResultBtn').onclick=renderHome;
 }
 
@@ -272,7 +272,7 @@ function renderTermNote(grade='全部',field='全部'){
   const draw=()=>{
     const word=(document.getElementById('noteSearch').value||'').trim().toLowerCase();
     const cards=state.terms.filter(c=>(grade==='全部'||c.grade===grade)&&(field==='全部'||c.field===field)&&(!word||`${c.term} ${c.reading} ${c.definition} ${c.supplement}`.toLowerCase().includes(word)));
-    document.getElementById('noteList').innerHTML=cards.slice(0,300).map(c=>`<article class="note-card"><div class="note-meta">${escapeHTML(c.grade)}${c.field?' ／ '+escapeHTML(c.field):''} ／ p${escapeHTML(c.page)}${c.required?' ／ ★':''}</div><h3>${escapeHTML(c.term)}${c.reading?` <small>（${escapeHTML(c.reading)}）</small>`:''}</h3><p>${escapeHTML(c.definition)}</p>${c.supplement?`<p class="supplement">${escapeHTML(c.supplement)}</p>`:''}</article>`).join('') || '<div class="empty">該当する用語はありません</div>';
+    document.getElementById('noteList').innerHTML=cards.map(c=>`<article class="note-card"><div class="note-meta">${escapeHTML(c.grade)}${c.field?' ／ '+escapeHTML(c.field):''} ／ p${escapeHTML(c.page)}${c.required?' ／ ★':''}</div><h3>${escapeHTML(c.term)}${c.reading?` <small>（${escapeHTML(c.reading)}）</small>`:''}</h3><p>${escapeHTML(c.definition)}</p>${c.supplement?`<p class="supplement">${escapeHTML(c.supplement)}</p>`:''}</article>`).join('') || '<div class="empty">該当する用語はありません</div>';
   };
   draw(); document.getElementById('noteSearch').oninput=draw;
   document.querySelectorAll('[data-note-grade]').forEach(b=>b.onclick=()=>renderTermNote(b.dataset.noteGrade,'全部'));

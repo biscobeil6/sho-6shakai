@@ -5,5 +5,10 @@
   "ids_first": "Q0001",
   "ids_last": "Q0631",
   "cards": 654,
-  "required": 467
+  "required": 467,
+  "version": "0.2.1",
+  "term_cards": 654,
+  "term_cards_with_field": 654,
+  "term_note_limit": "none",
+  "global_wrong_again_fix": true
 }
